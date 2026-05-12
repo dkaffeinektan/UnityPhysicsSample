@@ -100,3 +100,9 @@ InitTestScene*.unity*
 
 # Entity client settings
 ProjectSettings/EntitiesClientSettings.asset
+.cursorignore
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+*.code-workspace
+*.slnx
