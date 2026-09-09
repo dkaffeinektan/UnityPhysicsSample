@@ -73,6 +73,9 @@ namespace Unity.Physics.Extensions
             var meshTrsList = m_MeshTrsList;
             var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld;
 
+            // PhysicsDebugDisplaySystem.Point/Line were removed in Physics 6.6; draw through the DebugDraw singleton instead.
+            SystemAPI.TryGetSingleton(out DebugDraw debugDraw);
+
             NativeList<RaycastHit> raycastHits = new NativeList<RaycastHit>(Allocator.TempJob);
             NativeList<ColliderCastHit> colliderCastHits = new NativeList<ColliderCastHit>(Allocator.TempJob);
             NativeList<DistanceHit> distanceHits = new NativeList<DistanceHit>(Allocator.TempJob);
@@ -105,7 +108,7 @@ namespace Unity.Physics.Extensions
                 DisplayResults(physicsWorld, qd, raycastInput,
                     colliderCastInput, pointDistanceInput, colliderDistanceInput,
                     raycastHits, colliderCastHits, distanceHits,
-                    ref meshTrsList);
+                    ref meshTrsList, debugDraw);
             }
 
             raycastHits.Dispose();
@@ -253,7 +256,7 @@ namespace Unity.Physics.Extensions
         void DisplayResults(in PhysicsWorld world, in QueryData queryData, in RaycastInput raycastInput,
             in ColliderCastInput colliderCastInput, in PointDistanceInput pointDistanceInput, in ColliderDistanceInput colliderDistanceInput,
             in NativeList<RaycastHit> raycastHits, in NativeList<ColliderCastHit> colliderCastHits, in NativeList<DistanceHit> distanceHits,
-            ref MeshTrsList meshTrsList)
+            ref MeshTrsList meshTrsList, in DebugDraw debugDraw)
         {
             // Draw the query
             bool colliderCast = math.any(new float3(queryData.Direction) != float3.zero);
@@ -265,7 +268,7 @@ namespace Unity.Physics.Extensions
 
                 if (colliderCast)
                 {
-                    PhysicsDebugDisplaySystem.Line(worldFromCollider.Translation, colliderCastInput.End, Unity.DebugDisplay.ColorIndex.Red);
+                    debugDraw.Line(worldFromCollider.Translation, colliderCastInput.End, Unity.DebugDisplay.ColorIndex.Red);
                 }
 
                 if (queryData.ColliderType != ColliderType.Compound)
@@ -291,11 +294,11 @@ namespace Unity.Physics.Extensions
             {
                 if (math.any(new float3(queryData.Direction) != float3.zero))
                 {
-                    PhysicsDebugDisplaySystem.Line(raycastInput.Start, raycastInput.End, Unity.DebugDisplay.ColorIndex.Red);
+                    debugDraw.Line(raycastInput.Start, raycastInput.End, Unity.DebugDisplay.ColorIndex.Red);
                 }
                 else
                 {
-                    PhysicsDebugDisplaySystem.Point(pointDistanceInput.Position, 0.05f, Unity.DebugDisplay.ColorIndex.Red);
+                    debugDraw.Point(pointDistanceInput.Position, 0.05f, Unity.DebugDisplay.ColorIndex.Red);
                 }
             }
 
@@ -307,17 +310,17 @@ namespace Unity.Physics.Extensions
                     Assert.IsTrue(hit.RigidBodyIndex >= 0 && hit.RigidBodyIndex < world.NumBodies);
                     Assert.IsTrue(math.abs(math.lengthsq(hit.SurfaceNormal) - 1.0f) < 0.01f);
 
-                    PhysicsDebugDisplaySystem.Line(raycastInput.Start, hit.Position, Unity.DebugDisplay.ColorIndex.Magenta);
-                    PhysicsDebugDisplaySystem.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
+                    debugDraw.Line(raycastInput.Start, hit.Position, Unity.DebugDisplay.ColorIndex.Magenta);
+                    debugDraw.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
 
                     if (queryData.DrawSurfaceNormal)
                     {
-                        PhysicsDebugDisplaySystem.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
+                        debugDraw.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
                     }
 
                     if (queryData.HighlightLeafCollider && !hit.ColliderKey.Equals(ColliderKey.Empty))
                     {
-                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey);
+                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey, debugDraw);
 
                         // Need to fix this once Unity.DebugDisplay.Label starts working and is exposed in PhysicsDebugDisplaySystem API [Havok-275]
                         //GUIStyle style = new GUIStyle();
@@ -336,8 +339,8 @@ namespace Unity.Physics.Extensions
                     Assert.IsTrue(math.abs(math.lengthsq(hit.SurfaceNormal) - 1.0f) < 0.01f);
 
                     Gizmos.color = Color.magenta;
-                    PhysicsDebugDisplaySystem.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
-                    PhysicsDebugDisplaySystem.Point(hit.Position - (colliderCastInput.End - colliderCastInput.Start) * hit.Fraction, 0.02f, Unity.DebugDisplay.ColorIndex.White);
+                    debugDraw.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
+                    debugDraw.Point(hit.Position - (colliderCastInput.End - colliderCastInput.Start) * hit.Fraction, 0.02f, Unity.DebugDisplay.ColorIndex.White);
 
                     if (queryData.Collider.Value.Type == ColliderType.Compound)
                     {
@@ -373,12 +376,12 @@ namespace Unity.Physics.Extensions
 
                     if (queryData.DrawSurfaceNormal)
                     {
-                        PhysicsDebugDisplaySystem.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
+                        debugDraw.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
                     }
 
                     if (queryData.HighlightLeafCollider && !hit.ColliderKey.Equals(ColliderKey.Empty))
                     {
-                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey);
+                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey, debugDraw);
                     }
                 }
             }
@@ -395,24 +398,24 @@ namespace Unity.Physics.Extensions
                     Assert.IsTrue(hit.Fraction <= maxDistance);
                     float3 queryPoint = hit.Position + hit.SurfaceNormal * hit.Distance;
 
-                    PhysicsDebugDisplaySystem.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
-                    PhysicsDebugDisplaySystem.Point(queryPoint, 0.02f, Unity.DebugDisplay.ColorIndex.White);
-                    PhysicsDebugDisplaySystem.Line(hit.Position, queryPoint, Unity.DebugDisplay.ColorIndex.Magenta);
+                    debugDraw.Point(hit.Position, 0.02f, Unity.DebugDisplay.ColorIndex.White);
+                    debugDraw.Point(queryPoint, 0.02f, Unity.DebugDisplay.ColorIndex.White);
+                    debugDraw.Line(hit.Position, queryPoint, Unity.DebugDisplay.ColorIndex.Magenta);
 
                     if (queryData.DrawSurfaceNormal)
                     {
-                        PhysicsDebugDisplaySystem.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
+                        debugDraw.Line(hit.Position, hit.Position + hit.SurfaceNormal, Unity.DebugDisplay.ColorIndex.Green);
                     }
 
                     if (queryData.HighlightLeafCollider && !hit.ColliderKey.Equals(ColliderKey.Empty))
                     {
-                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey);
+                        DrawLeafCollider(world.Bodies[hit.RigidBodyIndex], hit.ColliderKey, debugDraw);
                     }
                 }
             }
         }
 
-        void DrawLeafCollider(RigidBody body, ColliderKey key)
+        void DrawLeafCollider(RigidBody body, ColliderKey key, in DebugDraw debugDraw)
         {
             unsafe
             {
@@ -431,17 +434,17 @@ namespace Unity.Physics.Extensions
                             v3 = math.transform(worldFromLeaf, polygon->Vertices[3]);
                         }
 
-                        PhysicsDebugDisplaySystem.Line(v0, v1, Unity.DebugDisplay.ColorIndex.Yellow);
-                        PhysicsDebugDisplaySystem.Line(v1, v2, Unity.DebugDisplay.ColorIndex.Yellow);
+                        debugDraw.Line(v0, v1, Unity.DebugDisplay.ColorIndex.Yellow);
+                        debugDraw.Line(v1, v2, Unity.DebugDisplay.ColorIndex.Yellow);
 
                         if (polygon->IsTriangle)
                         {
-                            PhysicsDebugDisplaySystem.Line(v2, v0, Unity.DebugDisplay.ColorIndex.Yellow);
+                            debugDraw.Line(v2, v0, Unity.DebugDisplay.ColorIndex.Yellow);
                         }
                         else
                         {
-                            PhysicsDebugDisplaySystem.Line(v2, v3, Unity.DebugDisplay.ColorIndex.Yellow);
-                            PhysicsDebugDisplaySystem.Line(v3, v0, Unity.DebugDisplay.ColorIndex.Yellow);
+                            debugDraw.Line(v2, v3, Unity.DebugDisplay.ColorIndex.Yellow);
+                            debugDraw.Line(v3, v0, Unity.DebugDisplay.ColorIndex.Yellow);
                         }
                     }
                 }

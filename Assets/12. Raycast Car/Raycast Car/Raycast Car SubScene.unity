@@ -285,6 +285,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 699050321}
     m_Modifications:
+    - target: {fileID: 2712439346884509244, guid: 7db649ed98f09464a83a83e7c530bc30,
+        type: 3}
+      propertyPath: m_MotionType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353275268412620787, guid: 7db649ed98f09464a83a83e7c530bc30,
+        type: 3}
+      propertyPath: m_Material.m_CollidesWithCategories.m_Value.Category00
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5608988086525998645, guid: 7db649ed98f09464a83a83e7c530bc30,
         type: 3}
       propertyPath: m_Name
@@ -343,7 +353,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5608988086525998645, guid: 7db649ed98f09464a83a83e7c530bc30,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 216054318}
   m_SourcePrefab: {fileID: 100100000, guid: 7db649ed98f09464a83a83e7c530bc30, type: 3}
 --- !u!4 &216054316 stripped
 Transform:
@@ -351,6 +365,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 216054315}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &216054317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5608988086525998645, guid: 7db649ed98f09464a83a83e7c530bc30,
+    type: 3}
+  m_PrefabInstance: {fileID: 216054315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &216054318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216054317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecb5a9d99c1e4324be6771b9b83142f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Physics.Custom::Unity.Physics.Authoring.LinearVelocityMotor
+  ConnectedBody: {fileID: 0}
+  EnableCollision: 0
+  MaxImpulse:
+    x: Infinity
+    y: Infinity
+    z: Infinity
+  AnchorPosition:
+    x: 0
+    y: 0
+    z: 0
+  DirectionOfMovement:
+    x: 0
+    y: 1
+    z: 0
+  TargetSpeed: 1
+  MaxImpulseAppliedByMotor: Infinity
+  DampingRatio: 2530.126
 --- !u!1 &243139450
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,6 +638,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -610,9 +661,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &243139455
 MeshFilter:

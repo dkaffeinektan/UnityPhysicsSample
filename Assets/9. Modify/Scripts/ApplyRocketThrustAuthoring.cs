@@ -2,10 +2,12 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics.Authoring;
+using Unity.Physics;
+using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 using UnityEngine;
 using Math = Unity.Physics.Math;
-using Unity.Physics.Aspects;
 
 [RequireComponent(typeof(PhysicsBodyAuthoring))]
 public class ApplyRocketThrustAuthoring : MonoBehaviour
@@ -75,14 +77,18 @@ public partial struct ApplyRocketThrustSystem : ISystem
     {
         public float DeltaTime;
 
-        public void Execute(in ApplyRocketThrust rocket, RigidBodyAspect rigidBodyAspect)
+        public void Execute(in ApplyRocketThrust rocket, in LocalTransform transform,
+            in PhysicsMass mass, ref PhysicsVelocity velocity)
         {
             // Newton's 3rd law states that for every action there is an equal and opposite reaction.
             // As this is a rocket thrust the impulse applied with therefore use negative Direction.
-            float3 impulse = -rocket.Direction * rocket.Magnitude;
-            impulse *= DeltaTime;
+            float3 impulseLocal = -rocket.Direction * rocket.Magnitude;
+            impulseLocal *= DeltaTime;
 
-            rigidBodyAspect.ApplyImpulseAtPointLocalSpace(impulse, rocket.Offset);
+            // ApplyImpulse expects world-space impulse and point, so convert from the body's local space.
+            float3 impulseWorld = math.rotate(transform.Rotation, impulseLocal);
+            float3 pointWorld = transform.TransformPoint(rocket.Offset);
+            velocity.ApplyImpulse(mass, transform.Position, transform.Rotation, impulseWorld, pointWorld);
         }
     }
 

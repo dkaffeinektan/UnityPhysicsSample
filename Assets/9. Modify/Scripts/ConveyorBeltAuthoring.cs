@@ -172,6 +172,7 @@ public partial struct DisplayConveyorBeltSystem : ISystem
     public partial struct DisplayConveyorBeltJob : IJobEntity
     {
         public float DeltaTime;
+        public DebugDraw DebugDraw;
 
         public void Execute(in LocalToWorld localToWorld, in ConveyorBelt conveyorBelt, ref ConveyorBeltDebugDisplayData debugDisplayData)
         {
@@ -179,7 +180,7 @@ public partial struct DisplayConveyorBeltSystem : ISystem
                 DeltaTime, !conveyorBelt.IsAngular, ref debugDisplayData.Offset,
                 out RigidTransform worldDrawingTransform, out float3 boxSize))
             {
-                PhysicsDebugDisplaySystem.Box(boxSize, worldDrawingTransform.pos, worldDrawingTransform.rot, Unity.DebugDisplay.ColorIndex.Blue);
+                DebugDraw.Box(boxSize, worldDrawingTransform.pos, worldDrawingTransform.rot, Unity.DebugDisplay.ColorIndex.Blue);
             }
         }
     }
@@ -208,9 +209,14 @@ public partial struct DisplayConveyorBeltSystem : ISystem
             SystemAPI.GetSingletonRW<PhysicsDebugDisplayData>();
         }
 
+        // DebugDraw is only present while the physics debug display is drawing; skip otherwise.
+        if (!SystemAPI.TryGetSingleton(out DebugDraw debugDraw))
+            return;
+
         state.Dependency = new DisplayConveyorBeltJob
         {
-            DeltaTime = SystemAPI.Time.fixedDeltaTime
+            DeltaTime = SystemAPI.Time.fixedDeltaTime,
+            DebugDraw = debugDraw
         }.Schedule(state.Dependency);
 #endif
     }

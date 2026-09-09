@@ -14,8 +14,8 @@ using Collider = Unity.Physics.Collider;
 
 public class SingleThreadedRagdoll : MonoBehaviour
 {
-    public PhysicsWorld PhysicsWorld;
-    public NativeReference<int> HaveStaticBodiesChanged;
+    [System.NonSerialized] public PhysicsWorld PhysicsWorld;
+    [System.NonSerialized] public NativeReference<int> HaveStaticBodiesChanged;
 
     private SimulationContext SimulationContext;
 #if HAVOK_PHYSICS_EXISTS
@@ -264,7 +264,7 @@ public class SingleThreadedRagdoll : MonoBehaviour
                     Entity = Entity.Null,
                     AFromJoint = new Math.MTransform(jointInfo.JointData.BodyAFromJoint.AsRigidTransform()),
                     BFromJoint = new Math.MTransform(jointInfo.JointData.BodyBFromJoint.AsRigidTransform()),
-                    EnableCollision = (byte)(jointInfo.EnableCollision ? 1 : 0),
+                    EnableCollision = jointInfo.EnableCollision,
                     Version = jointInfo.JointData.Version
                 };
                 // We have to memcopy the data over to convert it to the internal container

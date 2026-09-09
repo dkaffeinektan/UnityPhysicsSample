@@ -4,7 +4,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Physics.Aspects;
+using Unity.Physics;
 using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
 using Unity.Transforms;
@@ -426,15 +426,15 @@ namespace Unity.Physics.Tests
         [ReadOnly] public float MaxAngVelSq;
 
         [GenerateTestsForBurstCompatibility]
-        void Execute(RigidBodyAspect rigidBody)
+        void Execute(Entity entity, in PhysicsVelocity velocity)
         {
-            var vSq = math.lengthsq(rigidBody.LinearVelocity);
-            var wSq = math.lengthsq(rigidBody.AngularVelocityLocalSpace);
+            var vSq = math.lengthsq(velocity.Linear);
+            var wSq = math.lengthsq(velocity.Angular);
             bool linVelAtRest = vSq <= MaxLinVelSq;
             bool angVelAtRest = wSq <= MaxAngVelSq;
             if (!linVelAtRest || !angVelAtRest)
             {
-                Errors.Add($"Validation (Rigid Body, Entity: {rigidBody.Entity.ToFixedString()}): (linear, angular) velocity is ({math.sqrt(vSq)}, {math.sqrt(wSq)}), which exceeds the (linear, angular) velocity error tolerance of ({MaxLinVel}, {MaxAngVel}).");
+                Errors.Add($"Validation (Rigid Body, Entity: {entity.ToFixedString()}): (linear, angular) velocity is ({math.sqrt(vSq)}, {math.sqrt(wSq)}), which exceeds the (linear, angular) velocity error tolerance of ({MaxLinVel}, {MaxAngVel}).");
             }
         }
     }

@@ -92,7 +92,7 @@ namespace Unity.Physics.Authoring
                 var constraintBodyPair = GetConstrainedBodyPair(authoring);
 
                 uint worldIndex = GetWorldIndexFromBaseJoint(authoring);
-                CreateJointEntity(worldIndex, constraintBodyPair, joint);
+                CreateJointEntity(worldIndex, constraintBodyPair, authoring.SolverType, joint);
             }
         }
     }

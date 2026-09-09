@@ -1,6 +1,6 @@
-#if UNITY_ANDROID && !UNITY_64
-#define UNITY_ANDROID_ARM7V
-#endif
+// 32-bit ARMv7 Android is no longer supported in Unity 6 (arm64-only), so the
+// former "#if UNITY_ANDROID && !UNITY_64 -> #define UNITY_ANDROID_ARM7V" block was
+// removed (UNITY_64 is deprecated). The ARM7V-specific paths below now compile out.
 
 using NUnit.Framework;
 using System.Collections;

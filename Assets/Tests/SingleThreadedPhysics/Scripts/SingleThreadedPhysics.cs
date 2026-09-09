@@ -221,7 +221,7 @@ public partial class SingleThreadedPhysicsSystem : SystemBase
                 Entity = Entity.Null,
                 AFromJoint = new Math.MTransform(jointData.BodyAFromJoint.AsRigidTransform()),
                 BFromJoint = new Math.MTransform(jointData.BodyBFromJoint.AsRigidTransform()),
-                EnableCollision = (byte)constrainedBodyPairs[i].EnableCollision,
+                EnableCollision = constrainedBodyPairs[i].EnableCollision != 0,
                 Version = jointData.Version,
             };
             // We have to memcopy the data over to convert it to the internal container
