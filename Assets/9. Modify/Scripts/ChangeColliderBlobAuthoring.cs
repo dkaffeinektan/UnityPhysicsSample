@@ -177,7 +177,7 @@ public partial struct ChangeColliderBlobSystem : ISystem
         // Change the colour of the colliders based on their restitution (which was changed by the blob job)
         var entityArray = m_MaterialQuery.ToEntityArray(Allocator.Temp);
         if (entityArray.Length == 0) return;
-        var materials = state.EntityManager.GetSharedComponentManaged<ColliderMaterialsComponent>(entityArray[0]);
+        var materials = state.EntityManager.GetSharedComponent<ColliderMaterialsComponent>(entityArray[0]);
 
         var renderMeshArraysToAdd = new List<RenderMeshArray>();
         var entitiesToAdd = new NativeList<Entity>(Allocator.Temp);
@@ -190,7 +190,7 @@ public partial struct ChangeColliderBlobSystem : ISystem
         {
             var restitution = collider.ValueRO.Value.Value.GetRestitution();
             var useMaterial = (restitution < k_GrowingRestitution) ? materials.ShrinkMaterial : materials.GrowMaterial;
-            var materialArray = new[] { (UnityObjectRef<UnityEngine.Material>)useMaterial };
+            var materialArray = new[] { useMaterial };
             var newRenderMeshArray = new RenderMeshArray(materialArray, renderMeshArray.MeshReferences);
 
             renderMeshArraysToAdd.Add(newRenderMeshArray);

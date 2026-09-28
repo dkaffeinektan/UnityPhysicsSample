@@ -1,4 +1,3 @@
-using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,18 +9,9 @@ using UnityEngine;
 
 struct TeleportKinematicBody : IComponentData {}
 
-struct AnimateKinematicBodyCurve : ISharedComponentData, IEquatable<AnimateKinematicBodyCurve>
+struct AnimateKinematicBodyCurve : ISharedComponentData
 {
-    public AnimationCurve TranslationCurve;
-    public AnimationCurve OrientationCurve;
-
-    public bool Equals(AnimateKinematicBodyCurve other) =>
-        Equals(TranslationCurve, other.TranslationCurve) && Equals(OrientationCurve, other.OrientationCurve);
-
-    public override bool Equals(object obj) => obj is AnimateKinematicBodyCurve other && Equals(other);
-
-    public override int GetHashCode() =>
-        unchecked((int)math.hash(new int2(TranslationCurve?.GetHashCode() ?? 0, OrientationCurve?.GetHashCode() ?? 0)));
+    public UnityObjectRef<AnimateKinematicBodyCurveHost> Host;
 }
 
 // translate a body along the z-axis and rotate about the y-axis following animation curves
@@ -68,11 +58,10 @@ class AnimateKinematicBodyBaker : Baker<AnimateKinematicBodyAuthoring>
         if (authoring.AnimateMode == AnimateKinematicBodyAuthoring.Mode.Teleport)
             AddComponent<TeleportKinematicBody>(entity);
 
-        AddSharedComponentManaged(entity, new AnimateKinematicBodyCurve
-        {
-            TranslationCurve = authoring.TranslationCurve,
-            OrientationCurve = authoring.OrientationCurve
-        });
+        var host = ScriptableObject.CreateInstance<AnimateKinematicBodyCurveHost>();
+        host.TranslationCurve = authoring.TranslationCurve;
+        host.OrientationCurve = authoring.OrientationCurve;
+        AddSharedComponent(entity, new AnimateKinematicBodyCurve { Host = host });
     }
 }
 
@@ -88,8 +77,9 @@ partial struct AnimateKinematicBodySystem : ISystem
     // curves translate along the z-axis and set an orientation rotated about the y-axis
     static void Sample(in AnimateKinematicBodyCurve curve, in float t, ref float3 position, ref quaternion orientation)
     {
-        position.z = curve.TranslationCurve.Evaluate(t);
-        orientation = quaternion.AxisAngle(math.up(), math.radians(curve.OrientationCurve.Evaluate(t)));
+        var curves = curve.Host.Value;
+        position.z = curves.TranslationCurve.Evaluate(t);
+        orientation = quaternion.AxisAngle(math.up(), math.radians(curves.OrientationCurve.Evaluate(t)));
     }
 
     public void OnUpdate(ref SystemState state)

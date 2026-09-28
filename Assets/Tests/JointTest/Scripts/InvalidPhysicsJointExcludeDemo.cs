@@ -5,9 +5,9 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-public class InvalidPhysicsJointExcludeDemoScene : SceneCreationSettings
+public struct InvalidPhysicsJointExcludeDemoScene : IComponentData
 {
-    public float TimeToSwap = 0.5f;
+    public float TimeToSwap;
 }
 
 public class InvalidPhysicsJointExcludeDemo : SceneCreationAuthoring<InvalidPhysicsJointExcludeDemoScene>
@@ -19,10 +19,13 @@ public class InvalidPhysicsJointExcludeDemo : SceneCreationAuthoring<InvalidPhys
         public override void Bake(InvalidPhysicsJointExcludeDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new InvalidPhysicsJointExcludeDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
-                StaticMaterial = authoring.StaticMaterial,
+                StaticMaterial = authoring.StaticMaterial
+            });
+            AddComponent(entity, new InvalidPhysicsJointExcludeDemoScene
+            {
                 TimeToSwap = authoring.TimeToSwap
             });
         }

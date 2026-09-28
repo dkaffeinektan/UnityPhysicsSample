@@ -367,7 +367,7 @@ public class SingleThreadedRagdoll : MonoBehaviour
         HaveStaticBodiesChanged = new NativeReference<int>(1, Allocator.Persistent);
 
         // Create all the Bodies
-        var basicBodyInfos = GameObject.FindObjectsByType<BasicBodyInfo>(FindObjectsSortMode.None);
+        var basicBodyInfos = GameObject.FindObjectsByType<BasicBodyInfo>();
         for (int i = 0; i < basicBodyInfos.Length; i++)
         {
             var basicBodyInfo = basicBodyInfos[i];
@@ -381,7 +381,7 @@ public class SingleThreadedRagdoll : MonoBehaviour
         }
 
         // Create all the Joints
-        var basicJointInfos = GameObject.FindObjectsByType<BasicJointInfo>(FindObjectsSortMode.None);
+        var basicJointInfos = GameObject.FindObjectsByType<BasicJointInfo>();
         for (int i = 0; i < basicJointInfos.Length; i++)
         {
             var basicJointInfo = basicJointInfos[i];

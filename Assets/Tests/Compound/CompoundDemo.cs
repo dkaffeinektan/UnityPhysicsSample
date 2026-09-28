@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
-public class CompoundDemoScene : SceneCreationSettings {};
+public struct CompoundDemoScene : IComponentData {}
 
 public class CompoundDemo : SceneCreationAuthoring<CompoundDemoScene>
 {
@@ -12,11 +12,12 @@ public class CompoundDemo : SceneCreationAuthoring<CompoundDemoScene>
         public override void Bake(CompoundDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new CompoundDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<CompoundDemoScene>(entity);
         }
     }
 }

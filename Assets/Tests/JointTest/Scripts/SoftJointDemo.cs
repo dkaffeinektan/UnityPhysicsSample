@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using static Unity.Physics.Math;
 
-public class SoftJointDemoScene : SceneCreationSettings {}
+public struct SoftJointDemoScene : IComponentData {}
 
 public class SoftJointDemo : SceneCreationAuthoring<SoftJointDemoScene>
 {
@@ -12,11 +12,12 @@ public class SoftJointDemo : SceneCreationAuthoring<SoftJointDemoScene>
         public override void Bake(SoftJointDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new SoftJointDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<SoftJointDemoScene>(entity);
         }
     }
 }

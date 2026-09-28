@@ -4,7 +4,7 @@ using Unity.Physics;
 using UnityEngine;
 using static Unity.Physics.Math;
 
-public class RagdollGridDemoScene : SceneCreationSettings {}
+public struct RagdollGridDemoScene : IComponentData {}
 
 public class RagdollGridDemo : SceneCreationAuthoring<RagdollGridDemoScene>
 {
@@ -13,11 +13,12 @@ public class RagdollGridDemo : SceneCreationAuthoring<RagdollGridDemoScene>
         public override void Bake(RagdollGridDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new RagdollGridDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<RagdollGridDemoScene>(entity);
         }
     }
 }

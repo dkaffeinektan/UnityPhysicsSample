@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Entities.Graphics;
-using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Authoring;
 using Unity.Physics.Systems;
@@ -21,25 +19,11 @@ public struct ChangeMotionType : IComponentData
     internal float Timer;
 }
 
-public struct ChangeMotionMaterials : ISharedComponentData, IEquatable<ChangeMotionMaterials>
+public struct ChangeMotionMaterials : ISharedComponentData
 {
-    public UnityEngine.Material DynamicMaterial;
-    public UnityEngine.Material KinematicMaterial;
-    public UnityEngine.Material StaticMaterial;
-
-    public bool Equals(ChangeMotionMaterials other) =>
-        Equals(DynamicMaterial, other.DynamicMaterial)
-        && Equals(KinematicMaterial, other.KinematicMaterial)
-        && Equals(StaticMaterial, other.StaticMaterial);
-
-    public override bool Equals(object obj) => obj is ChangeMotionMaterials other && Equals(other);
-
-    public override int GetHashCode() =>
-        unchecked((int)math.hash(new int3(
-            DynamicMaterial != null ? DynamicMaterial.GetHashCode() : 0,
-            KinematicMaterial != null ? KinematicMaterial.GetHashCode() : 0,
-            StaticMaterial != null ? StaticMaterial.GetHashCode() : 0
-        )));
+    public UnityObjectRef<Material> DynamicMaterial;
+    public UnityObjectRef<Material> KinematicMaterial;
+    public UnityObjectRef<Material> StaticMaterial;
 }
 
 public class ChangeMotionTypeAuthoring : MonoBehaviour
@@ -74,7 +58,7 @@ class ChangeMotionTypeAuthoringBaker : Baker<ChangeMotionTypeAuthoring>
             SetVelocityToZero = authoring.SetVelocityToZero
         });
 
-        AddSharedComponentManaged(entity, new ChangeMotionMaterials
+        AddSharedComponent(entity, new ChangeMotionMaterials
         {
             DynamicMaterial = authoring.DynamicMaterial,
             KinematicMaterial = authoring.KinematicMaterial,

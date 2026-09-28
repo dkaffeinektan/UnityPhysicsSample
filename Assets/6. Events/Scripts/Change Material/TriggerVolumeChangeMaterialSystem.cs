@@ -56,7 +56,6 @@ public partial class TriggerVolumeChangeMaterialSystem : SystemBase
                 if (triggerEvent.State == StatefulEventState.Enter)
                 {
                     MaterialMeshInfo volumeMaterialInfo = materialMeshInfoFromEntity[entity];
-                    RenderMeshArray volumeRenderMeshArray = EntityManager.GetSharedComponentManaged<RenderMeshArray>(entity);
 
                     MaterialMeshInfo otherMaterialMeshInfo = materialMeshInfoFromEntity[otherEntity];
 
@@ -74,7 +73,6 @@ public partial class TriggerVolumeChangeMaterialSystem : SystemBase
 
                     MaterialMeshInfo otherMaterialMeshInfo = materialMeshInfoFromEntity[otherEntity];
                     MaterialMeshInfo referenceMaterialMeshInfo = materialMeshInfoFromEntity[changeMaterial.ValueRW.ReferenceEntity];
-                    RenderMeshArray referenceRenderMeshArray = EntityManager.GetSharedComponentManaged<RenderMeshArray>(changeMaterial.ValueRW.ReferenceEntity);
 
                     otherMaterialMeshInfo.Material = referenceMaterialMeshInfo.Material;
 

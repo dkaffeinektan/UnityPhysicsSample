@@ -72,7 +72,7 @@ public partial class SpawnColliderFromTriggerSystem : SystemBase
         var worldIndex = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorldIndex;
         var renderMeshDescription = new RenderMeshDescription(UnityEngine.Rendering.ShadowCastingMode.Off);
         var meshResourcesEntity = meshResourcesEntities[0]; // Only care about the first one
-        var renderMeshResources = entityManager.GetSharedComponentManaged<RenderMeshArray>(meshResourcesEntity);
+        var renderMeshResources = entityManager.GetSharedComponent<RenderMeshArray>(meshResourcesEntity);
 
         // Create Prototype A and test first utility function:
         prototypeA = entityManager.CreateEntity();

@@ -12,7 +12,7 @@ using static Unity.Physics.Extensions.PhysicsSamplesExtensions;
 
 namespace Unity.Physics.Extensions
 {
-    public class MouseHover : IComponentData
+    public struct MouseHover : IComponentData
     {
         public bool IgnoreTriggers;
         public bool IgnoreStatic;
@@ -20,7 +20,6 @@ namespace Unity.Physics.Extensions
         public Entity CurrentEntity;
         public Entity HoverEntity;
         public MaterialMeshInfo OriginalMeshInfo;
-        public RenderMeshArray OriginalRenderMeshes;
     }
 
     [DisallowMultipleComponent]
@@ -39,7 +38,7 @@ namespace Unity.Physics.Extensions
         public override void Bake(MouseHoverAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
-            AddComponentObject(entity, new MouseHover()
+            AddComponent(entity, new MouseHover()
             {
                 PreviousEntity = Entity.Null,
                 CurrentEntity = Entity.Null,
@@ -256,6 +255,12 @@ namespace Unity.Physics.Extensions
             return renderEntity;
         }
 
+        /// <summary>
+        /// While an entity shows the hover material, its original RenderMeshArray is parked as a shared component on the
+        /// MouseHover singleton: a RenderMeshArray releases its storage once no entity uses it, and the parked value is
+        /// what the entity gets back afterwards. MouseHover is written back at the end rather than modified through a
+        /// reference, because the shared component changes are structural changes.
+        /// </summary>
         protected override void OnUpdate()
         {
             var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
@@ -268,7 +273,8 @@ namespace Unity.Physics.Extensions
                 Filter = CollisionFilter.Default,
             };
 
-            var mouseHover = SystemAPI.ManagedAPI.GetSingleton<MouseHover>();
+            var mouseHover = SystemAPI.GetSingleton<MouseHover>();
+            var mouseHoverEntity = SystemAPI.GetSingletonEntity<MouseHover>();
 
             RaycastHit hit;
             using (var raycastHitRef = new NativeReference<RaycastHit>(Allocator.TempJob))
@@ -296,11 +302,12 @@ namespace Unity.Physics.Extensions
             bool hasPreviousEntity = !mouseHover.PreviousEntity.Equals(Entity.Null);
             bool hasCurrentEntity = !mouseHover.CurrentEntity.Equals(Entity.Null);
 
-            if (hasPreviousEntity && EntityManager.HasComponent<MaterialMeshInfo>(mouseHover.PreviousEntity))
+            if (hasPreviousEntity && EntityManager.HasComponent<MaterialMeshInfo>(mouseHover.PreviousEntity)
+                && EntityManager.HasComponent<RenderMeshArray>(mouseHoverEntity))
             {
                 // restore render info to original in the last entity we were hovering over
                 EntityManager.SetComponentData(mouseHover.PreviousEntity, mouseHover.OriginalMeshInfo);
-                EntityManager.SetSharedComponentManaged(mouseHover.PreviousEntity, mouseHover.OriginalRenderMeshes);
+                EntityManager.SetSharedComponent(mouseHover.PreviousEntity, EntityManager.GetSharedComponent<RenderMeshArray>(mouseHoverEntity));
             }
 
             if (hasCurrentEntity && EntityManager.HasComponent<MaterialMeshInfo>(mouseHover.CurrentEntity) && EntityManager.HasComponent<RenderMeshArray>(mouseHover.CurrentEntity))
@@ -308,24 +315,27 @@ namespace Unity.Physics.Extensions
                 mouseHover.PreviousEntity = mouseHover.CurrentEntity;
                 mouseHover.CurrentEntity = graphicsEntity;
                 mouseHover.OriginalMeshInfo = EntityManager.GetComponentData<MaterialMeshInfo>(mouseHover.CurrentEntity);
-                mouseHover.OriginalRenderMeshes = EntityManager.GetSharedComponentManaged<RenderMeshArray>(mouseHover.CurrentEntity);
+                var originalRenderMeshes = EntityManager.GetSharedComponent<RenderMeshArray>(mouseHover.CurrentEntity);
+                EntityManager.AddSharedComponent(mouseHoverEntity, originalRenderMeshes);
 
                 // get render info from the hover entity
                 var hoverMeshInfo = EntityManager.GetComponentData<MaterialMeshInfo>(mouseHover.HoverEntity);
-                var hoverRenderMeshes = EntityManager.GetSharedComponentManaged<RenderMeshArray>(mouseHover.HoverEntity);
+                var hoverRenderMeshes = EntityManager.GetSharedComponent<RenderMeshArray>(mouseHover.HoverEntity);
 
                 // create new render info for the current entity that we hover over:
 
                 // use the materials from the hover entity, but the meshes from the current entity
-                var newRenderMeshes = new RenderMeshArray(hoverRenderMeshes.MaterialReferences, mouseHover.OriginalRenderMeshes.MeshReferences);
+                var newRenderMeshes = new RenderMeshArray(hoverRenderMeshes.MaterialReferences, originalRenderMeshes.MeshReferences);
 
                 // use the material id from the hover entity, but the mesh id from the current entity
                 var newMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(hoverMeshInfo.Material, mouseHover.OriginalMeshInfo.Mesh);
 
                 // apply the new render info to the current entity
                 EntityManager.SetComponentData(mouseHover.CurrentEntity, newMeshInfo);
-                EntityManager.SetSharedComponentManaged(mouseHover.CurrentEntity, newRenderMeshes);
+                EntityManager.SetSharedComponent(mouseHover.CurrentEntity, newRenderMeshes);
             }
+
+            EntityManager.SetComponentData(mouseHoverEntity, mouseHover);
         }
     }
 }

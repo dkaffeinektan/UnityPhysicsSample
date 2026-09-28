@@ -27,7 +27,7 @@ public partial struct DisplayCollisionTextSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         k_TextOffset = new float3(0, 1.5f, 0);
-        _TextMeshQuery = state.GetEntityQuery(typeof(DisplayCollisionText), typeof(TextMesh));
+        _TextMeshQuery = state.GetEntityQuery(typeof(DisplayCollisionText), typeof(CompanionComponent<TextMesh>));
         _SentEntitiesQuery = state.GetEntityQuery(typeof(SentEntity));
     }
 
@@ -54,7 +54,7 @@ public partial struct DisplayCollisionTextSystem : ISystem
             var buffer = state.EntityManager.GetBuffer<StatefulCollisionEvent>(mapping.CollisionEventEntity);
 
             var displayCollisionTextComponent = state.EntityManager.GetComponentData<DisplayCollisionText>(mapping.TextEntity);
-            var textMesh = state.EntityManager.GetComponentObject<TextMesh>(mapping.TextEntity);
+            var textMesh = state.EntityManager.GetCompanion<TextMesh>(mapping.TextEntity);
 
             for (int i = 0; i < buffer.Length; i++)
             {

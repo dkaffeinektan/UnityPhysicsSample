@@ -34,7 +34,7 @@ public partial class RotateThroughCollisionFiltersSystem : SystemBase
 
         // Get the RenderMeshArray from the first entity in the query and use it to find the Material indices that
         // match the Materials of the static cubes in the scene
-        var mesh = EntityManager.GetSharedComponentManaged<RenderMeshArray>(entityArray[0]);
+        var mesh = EntityManager.GetSharedComponent<RenderMeshArray>(entityArray[0]);
 
         // For each red/green/blue GameObject, find the matching Material index in the RenderMeshArray
         var indexRed = FindMatchingMaterialIndex("Red", ref mesh);

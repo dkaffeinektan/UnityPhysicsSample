@@ -67,7 +67,7 @@ public class ProjectIntoFutureOnCueData : IComponentData
             manager.RemoveComponent<PhysicsVelocity>(ghost);
 
             manager.AddComponentData(ghost, new ProjectIntoFutureTrail());
-            manager.AddSharedComponentManaged(ghost, GhostMaterial);
+            manager.AddSharedComponent(ghost, GhostMaterial);
             manager.SetComponentData(ghost, MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0));
 
             var scale = new PostTransformMatrix { Value = float4x4.Scale(TrailScale) };

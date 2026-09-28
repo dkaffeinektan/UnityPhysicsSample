@@ -35,24 +35,18 @@ namespace Unity.Physics.Extensions
         protected override void OnDestroy()
         {
             EntityQuery query = GetEntityQuery(ComponentType.ReadWrite<QueryData>());
-            QueryData[] qdArr = query.ToComponentArray<QueryData>();
+            using NativeArray<QueryData> qdArr = query.ToComponentDataArray<QueryData>(Allocator.Temp);
 
-            if (qdArr != null)
+            for (int i = 0; i < qdArr.Length; i++)
             {
-                for (int i = 0; i < qdArr.Length; i++)
+                QueryData qd = qdArr[i];
+                if (qd.ColliderQuery && qd.ColliderDataInitialized)
                 {
-                    QueryData qd = qdArr[i];
-                    if (qd.ColliderQuery && qd.ColliderDataInitialized)
-                    {
-                        qd.Collider.Dispose();
+                    qd.Collider.Dispose();
 
-                        if (qd.ChildrenColliders != null)
-                        {
-                            for (int j = 0; j < qd.ChildrenColliders.Length; j++)
-                            {
-                                qd.ChildrenColliders[j].Dispose();
-                            }
-                        }
+                    for (int j = 0; j < qd.ChildrenColliders.Length; j++)
+                    {
+                        qd.ChildrenColliders[j].Dispose();
                     }
                 }
             }
@@ -83,11 +77,12 @@ namespace Unity.Physics.Extensions
             // The generated code doesn't automatically complete the dependency on PhysicsWorldSingleton
             EntityManager.CompleteDependencyBeforeRO<PhysicsWorldSingleton>();
 
-            foreach (var(qd, localToWorld) in SystemAPI.Query<QueryData, RefRO<LocalToWorld>>())
+            foreach (var(queryData, localToWorld) in SystemAPI.Query<RefRW<QueryData>, RefRO<LocalToWorld>>())
             {
+                ref var qd = ref queryData.ValueRW;
                 if (qd.ColliderQuery && !qd.ColliderDataInitialized)
                 {
-                    CreateCollider(qd);
+                    CreateCollider(ref qd);
                     qd.ColliderDataInitialized = true;
                 }
 
@@ -544,17 +539,10 @@ namespace Unity.Physics.Extensions
         #endregion
 
         #region Creation
-        private void CreateCollider(QueryData queryData)
+        private void CreateCollider(ref QueryData queryData)
         {
-            int numMeshes = 1;
-
-            if (queryData.ColliderType == ColliderType.Compound)
-            {
-                numMeshes = 2;
-                queryData.ChildrenColliders = new BlobAssetReference<Collider>[2];
-            }
-
-            queryData.ColliderMeshes = new UnityEngine.Mesh[numMeshes];
+            queryData.ChildrenColliders.Clear();
+            queryData.ColliderMeshes.Clear();
 
             BlobAssetReference<Collider> collider = default;
 
@@ -606,7 +594,7 @@ namespace Unity.Physics.Extensions
                         Center = float3.zero,
                         Radius = 0.5f
                     });
-                    queryData.ChildrenColliders[0] = child1;
+                    queryData.ChildrenColliders.Add(child1);
 
                     var child2 = BoxCollider.Create(new BoxGeometry
                     {
@@ -615,7 +603,7 @@ namespace Unity.Physics.Extensions
                         Size = new float3(1.0f),
                         BevelRadius = 0.0f
                     });
-                    queryData.ChildrenColliders[1] = child2;
+                    queryData.ChildrenColliders.Add(child2);
 
                     NativeArray<CompoundCollider.ColliderBlobInstance> childrenBlobs = new NativeArray<CompoundCollider.ColliderBlobInstance>(2, Allocator.TempJob);
                     childrenBlobs[0] = new CompoundCollider.ColliderBlobInstance
@@ -638,8 +626,8 @@ namespace Unity.Physics.Extensions
                         }
                     };
 
-                    queryData.ColliderMeshes[0] = child1.Value.ToMesh();
-                    queryData.ColliderMeshes[1] = child2.Value.ToMesh();
+                    queryData.ColliderMeshes.Add(child1.Value.ToMesh());
+                    queryData.ColliderMeshes.Add(child2.Value.ToMesh());
 
                     collider = CompoundCollider.Create(childrenBlobs);
                     childrenBlobs.Dispose();
@@ -673,7 +661,7 @@ namespace Unity.Physics.Extensions
 
             if (queryData.ColliderType != ColliderType.Compound)
             {
-                queryData.ColliderMeshes[0] = collider.Value.ToMesh();
+                queryData.ColliderMeshes.Add(collider.Value.ToMesh());
             }
 
             queryData.Collider = collider;

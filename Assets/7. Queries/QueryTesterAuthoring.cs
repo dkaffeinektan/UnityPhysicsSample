@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Entities;
 using UnityEngine;
@@ -42,13 +43,13 @@ namespace Unity.Physics.Extensions
                     queryData.ColliderDataInitialized = false;
 
                     var entity = GetEntity(TransformUsageFlags.Dynamic);
-                    AddComponentObject(entity, queryData);
+                    AddComponent(entity, queryData);
                 }
             }
         }
     }
 
-    public class QueryData : IComponentData
+    public struct QueryData : IComponentData
     {
         // authoring data
         public float Distance;
@@ -63,7 +64,7 @@ namespace Unity.Physics.Extensions
         // calculated data
         public bool ColliderDataInitialized;
         public BlobAssetReference<Collider> Collider;
-        public BlobAssetReference<Collider>[] ChildrenColliders;
-        public UnityEngine.Mesh[] ColliderMeshes;
+        public FixedList64Bytes<BlobAssetReference<Collider>> ChildrenColliders;
+        public FixedList64Bytes<UnityObjectRef<UnityEngine.Mesh>> ColliderMeshes;
     }
 }

@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -139,83 +135,71 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1716085102806623427, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 1716085102806623427, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_Orientation.value.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_Capsule.Axis
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_SphereRadius
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_Cylinder.Axis
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_Capsule.Height
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 3945518518046659535, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
+      propertyPath: m_PrefabInstanceID
+      value: 1638125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalPosition.y
       value: -2
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7682084060178167355, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7890845515503907925, guid: ebfe93b387bf4a54989a6f911bdc11d1,
-        type: 3}
+    - target: {fileID: 7890845515503907925, guid: ebfe93b387bf4a54989a6f911bdc11d1, type: 3}
       propertyPath: m_SerializedData.mesh
       value: 
       objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
@@ -286,6 +270,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -308,6 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 989247339
+  m_PrefabInstanceID: 0
   m_ShapeType: 30
   m_PrimitiveCenter:
     x: 0.000000059604645
@@ -346,6 +333,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -438,7 +429,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!23 &71080035
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -456,6 +447,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -477,9 +473,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &71080036
 MeshFilter:
@@ -536,6 +534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 696166695
+  m_PrefabInstanceID: 0
   m_ShapeType: 3
   m_PrimitiveCenter:
     x: 0.000000059604645
@@ -574,6 +574,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -666,7 +670,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!23 &493594039
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -684,6 +688,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -705,9 +714,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &493594040
 MeshFilter:
@@ -773,6 +784,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -820,6 +832,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -841,9 +858,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &642589931
 MeshFilter:
@@ -894,6 +913,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -916,6 +936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 272529365
+  m_PrefabInstanceID: 0
   m_ShapeType: 0
   m_PrimitiveCenter:
     x: 0
@@ -954,6 +976,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -1046,7 +1072,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!4 &642589936
 Transform:
   m_ObjectHideFlags: 0
@@ -1123,6 +1149,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -1145,6 +1172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 1778518174
+  m_PrefabInstanceID: 0
   m_ShapeType: 2
   m_PrimitiveCenter:
     x: 0
@@ -1183,6 +1212,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -1275,7 +1308,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!4 &1189489175
 Transform:
   m_ObjectHideFlags: 0
@@ -1316,6 +1349,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1337,9 +1375,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1246326349
 GameObject:
@@ -1378,10 +1418,24 @@ MonoBehaviour:
     x: -0
     y: -9.81
     z: -0
+  m_EnableGyroscopicTorque: 0
+  m_SubstepCount: 1
   m_SolverIterationCount: 4
+  m_DirectSolverSettings:
+    m_ContactStiffness: 100000
+    m_ContactDamping: 500
+    m_ContactSlip: 0.001
+    m_MaximumJointStiffness: 100000
+    m_MaximumJointDamping: 10000
+    m_MinimumMotorSlip: 0.0001
   m_EnableSolverStabilizationHeuristic: 0
   m_MultiThreaded: 1
+  m_CollisionTolerance: 0.01
   m_SynchronizeCollisionWorld: 0
+  m_IncrementalDynamicBroadphase: 0
+  m_IncrementalStaticBroadphase: 0
+  m_MaxDynamicDepenetrationVelocity: 3
+  m_MaxStaticDepenetrationVelocity: Infinity
 --- !u!114 &1246326352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,8 +1448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1f2299aae95eb4e80de7e4124130c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverPrefab: {fileID: 1191054677816456, guid: 5847e3636a433e3428bdc22fad0f06fe,
-    type: 3}
+  HoverPrefab: {fileID: 1191054677816456, guid: 5847e3636a433e3428bdc22fad0f06fe, type: 3}
   IgnoreTriggers: 1
   IgnoreStatic: 1
 --- !u!114 &1246326353
@@ -1412,6 +1465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IgnoreTriggers: 1
   IgnoreStatic: 1
+  DeleteEntityOnClick: 0
 --- !u!114 &1246326354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,6 +1487,11 @@ MonoBehaviour:
   DrawCollisionEvents: 0
   DrawTriggerEvents: 0
   DrawJoints: 0
+  ColliderDisplayMode: 0
+  ColliderEdgesDisplayMode: 0
+  ColliderAabbDisplayMode: 0
+  DisplayDirectSolverIslands: 0
+  DrawIterativeSolverPhases: 0
 --- !u!4 &1246326355
 Transform:
   m_ObjectHideFlags: 0
@@ -1509,6 +1568,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -1531,6 +1591,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 1698742083
+  m_PrefabInstanceID: 0
   m_ShapeType: 31
   m_PrimitiveCenter:
     x: 0
@@ -1569,6 +1631,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -1661,7 +1727,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!23 &1910012513
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1679,6 +1745,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1700,9 +1771,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1910012514
 MeshFilter:
@@ -1788,6 +1861,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  m_SolverType: 0
   m_WorldIndex: 0
   m_CustomTags:
     Tag00: 0
@@ -1810,6 +1884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ForceUniqueID: 959122760
+  m_PrefabInstanceID: 0
   m_ShapeType: 1
   m_PrimitiveCenter:
     x: 0
@@ -1848,6 +1924,10 @@ MonoBehaviour:
     m_CollisionResponse:
       m_Override: 0
       m_Value: 0
+    m_DetailedStaticMeshCollision:
+      m_Override: 0
+      m_Value:
+        Value: 0
     m_Friction:
       m_Override: 0
       m_Value:
@@ -1940,7 +2020,7 @@ MonoBehaviour:
         Tag06: 0
         Tag07: 0
     m_SerializedVersion: 1
-  m_SerializedVersion: 1
+  m_SerializedVersion: 3
 --- !u!23 &1968425597
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1958,6 +2038,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1979,9 +2064,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1968425598
 MeshFilter:

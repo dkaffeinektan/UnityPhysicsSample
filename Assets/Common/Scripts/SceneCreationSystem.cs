@@ -9,19 +9,21 @@ using UnityEngine;
 using Collider = Unity.Physics.Collider;
 using Material = UnityEngine.Material;
 
-public abstract class SceneCreationSettings : IComponentData
+/// <summary>
+/// Materials used by every scene created from code, kept apart from each demo's own settings component so that demos
+/// without settings can use an empty tag.
+/// </summary>
+public struct SceneCreationSettings : IComponentData
 {
-    public Material DynamicMaterial;
-    public Material StaticMaterial;
+    public UnityObjectRef<Material> DynamicMaterial;
+    public UnityObjectRef<Material> StaticMaterial;
 }
 
-public class SceneCreatedTag : IComponentData
-{
-};
+public struct SceneCreatedTag : IComponentData {}
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public abstract partial class SceneCreationSystem<T> : SystemBase
-    where T : SceneCreationSettings
+    where T : unmanaged, IComponentData
 {
     private EntityQuery m_ScenesToCreateQuery;
 
@@ -36,7 +38,7 @@ public abstract partial class SceneCreationSystem<T> : SystemBase
 
         m_ScenesToCreateQuery = GetEntityQuery(new EntityQueryDesc
         {
-            All = new ComponentType[] { typeof(T) },
+            All = new ComponentType[] { typeof(T), typeof(SceneCreationSettings) },
             None = new ComponentType[] { typeof(SceneCreatedTag) },
         });
         RequireForUpdate<T>();
@@ -50,15 +52,22 @@ public abstract partial class SceneCreationSystem<T> : SystemBase
         {
             foreach (Entity entity in entities)
             {
-                T settings = EntityManager.GetComponentObject<T>(entity);
+                var settings = EntityManager.GetComponentData<SceneCreationSettings>(entity);
                 DynamicMaterial = settings.DynamicMaterial;
                 StaticMaterial = settings.StaticMaterial;
 
-                CreateScene(settings);
-                EntityManager.AddComponentData(entity, new SceneCreatedTag());
+                CreateScene(GetSceneSettings(entity));
+                EntityManager.AddComponent<SceneCreatedTag>(entity);
             }
         }
     }
+
+    /// <summary>
+    /// Demos without settings use an empty tag as <typeparamref name="T"/>, which <c>EntityManager.GetComponentData</c>
+    /// rejects, so they get the default value.
+    /// </summary>
+    T GetSceneSettings(Entity entity) =>
+        TypeManager.IsZeroSized(TypeManager.GetTypeIndex<T>()) ? default : EntityManager.GetComponentData<T>(entity);
 
     protected override void OnDestroy()
     {

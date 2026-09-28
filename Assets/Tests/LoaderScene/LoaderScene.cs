@@ -136,7 +136,7 @@ static class LoaderSceneConfigurator
     [UnityEditor.Callbacks.PostProcessScene]
     static void OnPostProcessScene()
     {
-        var loader = UnityEngine.Object.FindObjectsByType<LoaderScene>(FindObjectsSortMode.None).FirstOrDefault();
+        var loader = UnityEngine.Object.FindObjectsByType<LoaderScene>().FirstOrDefault();
         if (loader != null)
             loader.SetScenes(UnityEditor.EditorBuildSettings.scenes);
     }

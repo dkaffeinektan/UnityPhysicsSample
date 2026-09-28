@@ -28,7 +28,7 @@ namespace Unity.Physics
                     new[] { meshA, meshB, meshB });
 
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddSharedComponentManaged(entity, createComponent);
+                AddSharedComponent(entity, createComponent);
                 AddComponent(entity, new ResourcesLoadedTag());
             }
         }

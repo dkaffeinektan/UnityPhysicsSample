@@ -19,7 +19,7 @@ namespace Unity.Physics.Tests
         public int NewCollider;
     }
 
-    public class VerifyActivationScene : SceneCreationSettings {}
+    public struct VerifyActivationScene : IComponentData {}
 
     public class VerifyActivation : SceneCreationAuthoring<VerifyActivationScene>
     {
@@ -35,11 +35,12 @@ namespace Unity.Physics.Tests
             public override void Bake(VerifyActivation authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponentObject(entity, new VerifyActivationScene()
+                AddComponent(entity, new SceneCreationSettings
                 {
                     DynamicMaterial = authoring.DynamicMaterial,
                     StaticMaterial = authoring.StaticMaterial
                 });
+                AddComponent<VerifyActivationScene>(entity);
                 AddComponent(entity, new VerifyActivationData
                 {
                     PureFilter = authoring.PureFilter ? 1 : 0,
@@ -62,7 +63,7 @@ namespace Unity.Physics.Tests
             float3 boxSize = new float3(1.0f, 1.0f, 1.0f);
             float mass = 1.0f;
 
-            Entity e = SystemAPI.ManagedAPI.GetSingletonEntity<VerifyActivationScene>();
+            Entity e = SystemAPI.GetSingletonEntity<VerifyActivationScene>();
             VerifyActivationData data = SystemAPI.GetComponent<VerifyActivationData>(e);
 
             // Ground to do nothing on (other than filter change) and dynamic box over it

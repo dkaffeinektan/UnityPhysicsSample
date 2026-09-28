@@ -9,7 +9,7 @@ namespace Unity.Physics.Tests
 {
     public struct ChangeCompoundFilterData : IComponentData {}
 
-    public class ChangeCompoundFilterScene : SceneCreationSettings {}
+    public struct ChangeCompoundFilterScene : IComponentData {}
 
     public class ChangeCompoundFilter : SceneCreationAuthoring<ChangeCompoundFilterScene>
     {
@@ -18,11 +18,12 @@ namespace Unity.Physics.Tests
             public override void Bake(ChangeCompoundFilter authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponentObject(entity, new ChangeCompoundFilterScene
+                AddComponent(entity, new SceneCreationSettings
                 {
                     DynamicMaterial = authoring.DynamicMaterial,
                     StaticMaterial = authoring.StaticMaterial
                 });
+                AddComponent<ChangeCompoundFilterScene>(entity);
                 AddComponent<ChangeCompoundFilterData>(entity);
             }
         }

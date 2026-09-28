@@ -289,7 +289,7 @@ public partial class SingleThreadedPhysicsSystem : SystemBase
             }
 
             var materialArray = new[] { (UnityObjectRef<Material>)referenceMaterial };
-            var ghostMaterial = new RenderMeshArray(materialArray, EntityManager.GetSharedComponentManaged<RenderMeshArray>(entities[i]).MeshReferences);
+            var ghostMaterial = new RenderMeshArray(materialArray, EntityManager.GetSharedComponent<RenderMeshArray>(entities[i]).MeshReferences);
 
             var ghost = EntityManager.Instantiate(entities[i]);
 
@@ -377,7 +377,7 @@ public partial class SingleThreadedPhysicsSystem : SystemBase
 
             EntityManager.RemoveComponent<PhysicsVelocity>(ghost);
 
-            EntityManager.SetSharedComponentManaged(ghost, ghostMaterial);
+            EntityManager.SetSharedComponent(ghost, ghostMaterial);
         }
 
         entities.Dispose();

@@ -8,7 +8,7 @@ using TerrainCollider = Unity.Physics.TerrainCollider;
 using Collider = Unity.Physics.Collider;
 using MeshCollider = Unity.Physics.MeshCollider;
 
-public class TerrainDemoScene : SceneCreationSettings
+public struct TerrainDemoScene : IComponentData
 {
     public int SizeX;
     public int SizeZ;
@@ -40,10 +40,13 @@ public class TerrainDemo : SceneCreationAuthoring<TerrainDemoScene>
         public override void Bake(TerrainDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new TerrainDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
-                StaticMaterial = authoring.StaticMaterial,
+                StaticMaterial = authoring.StaticMaterial
+            });
+            AddComponent(entity, new TerrainDemoScene
+            {
                 Method = authoring.Method,
                 SizeX = authoring.SizeX,
                 SizeZ = authoring.SizeZ,

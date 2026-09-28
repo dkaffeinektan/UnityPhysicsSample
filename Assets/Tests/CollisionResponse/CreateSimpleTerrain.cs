@@ -6,7 +6,7 @@ using Unity.Physics;
 using Unity.Physics.Extensions;
 using Unity.Transforms;
 
-public class CreateSimpleTerrainScene : SceneCreationSettings {}
+public struct CreateSimpleTerrainScene : IComponentData {}
 
 public class CreateSimpleTerrain : SceneCreationAuthoring<CreateSimpleTerrainScene>
 {
@@ -15,11 +15,12 @@ public class CreateSimpleTerrain : SceneCreationAuthoring<CreateSimpleTerrainSce
         public override void Bake(CreateSimpleTerrain authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new CreateSimpleTerrainScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<CreateSimpleTerrainScene>(entity);
         }
     }
 }

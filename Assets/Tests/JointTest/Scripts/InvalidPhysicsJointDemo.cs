@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
-public class InvalidPhysicsJointDemoScene : SceneCreationSettings {}
+public struct InvalidPhysicsJointDemoScene : IComponentData {}
 
 public class InvalidPhysicsJointDemo : SceneCreationAuthoring<InvalidPhysicsJointDemoScene>
 {
@@ -11,11 +11,12 @@ public class InvalidPhysicsJointDemo : SceneCreationAuthoring<InvalidPhysicsJoin
         public override void Bake(InvalidPhysicsJointDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new InvalidPhysicsJointDemoScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<InvalidPhysicsJointDemoScene>(entity);
         }
     }
 }

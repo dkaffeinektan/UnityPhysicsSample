@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
-public class FixedAngleGridScene : SceneCreationSettings {};
+public struct FixedAngleGridScene : IComponentData {}
 
 public class FixedAngleGridDemo : SceneCreationAuthoring<FixedAngleGridScene>
 {
@@ -12,11 +12,12 @@ public class FixedAngleGridDemo : SceneCreationAuthoring<FixedAngleGridScene>
         public override void Bake(FixedAngleGridDemo authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponentObject(entity, new FixedAngleGridScene
+            AddComponent(entity, new SceneCreationSettings
             {
                 DynamicMaterial = authoring.DynamicMaterial,
                 StaticMaterial = authoring.StaticMaterial
             });
+            AddComponent<FixedAngleGridScene>(entity);
         }
     }
 }

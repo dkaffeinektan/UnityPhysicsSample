@@ -49,7 +49,7 @@ namespace Unity.Physics
                     var childEntity = leg[j].Value;
                     if (manager.HasComponent<TreeTopTag>(childEntity) && manager.HasComponent<RenderMeshArray>(childEntity))
                     {
-                        var renderMeshArray = manager.GetSharedComponentManaged<RenderMeshArray>(childEntity);
+                        var renderMeshArray = manager.GetSharedComponent<RenderMeshArray>(childEntity);
                         var oldMaterialCount = renderMeshArray.MaterialReferences.Length;
                         var materials =
                             new UnityObjectRef<UnityEngine.Material>[oldMaterialCount + 1];
@@ -59,7 +59,7 @@ namespace Unity.Physics
                         renderMeshArray = new RenderMeshArray(materials, renderMeshArray.MeshReferences,
                             renderMeshArray.MaterialMeshIndices);
 
-                        manager.SetSharedComponentManaged(childEntity, renderMeshArray);
+                        manager.SetSharedComponent(childEntity, renderMeshArray);
 
                         deadTreeMaterialIndex = MaterialMeshInfo.ArrayIndexToStaticIndex(oldMaterialCount);
 

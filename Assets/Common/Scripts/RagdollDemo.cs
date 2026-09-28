@@ -9,10 +9,10 @@ using UnityEngine.Rendering;
 using static Unity.Physics.Math;
 using Collider = Unity.Physics.Collider;
 
-public class RagdollDemoScene : SceneCreationSettings
+public struct RagdollDemoScene : IComponentData
 {
-    public UnityEngine.Mesh TorsoMesh;
-    public UnityEngine.Mesh RenderMesh;
+    public UnityObjectRef<UnityEngine.Mesh> TorsoMesh;
+    public UnityObjectRef<UnityEngine.Mesh> RenderMesh;
     public int NumberOfRagdolls;
     public float RangeGain;
     public RigidTransform Transform;
@@ -33,10 +33,13 @@ class RagdollDemoBaker : Baker<RagdollDemo>
         DependsOn(authoring.RenderMesh);
         DependsOn(authoring.TorsoMesh);
         var entity = GetEntity(TransformUsageFlags.Dynamic);
-        AddComponentObject(entity, new RagdollDemoScene
+        AddComponent(entity, new SceneCreationSettings
         {
             DynamicMaterial = authoring.DynamicMaterial,
-            StaticMaterial = authoring.StaticMaterial,
+            StaticMaterial = authoring.StaticMaterial
+        });
+        AddComponent(entity, new RagdollDemoScene
+        {
             RenderMesh = authoring.RenderMesh,
             TorsoMesh = authoring.TorsoMesh,
             NumberOfRagdolls = authoring.NumberOfRagdolls,

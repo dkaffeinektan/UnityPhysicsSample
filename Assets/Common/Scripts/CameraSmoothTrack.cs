@@ -71,9 +71,9 @@ public class CameraSmoothTrack : MonoBehaviour
     }
 }
 
-public class MainCamera : IComponentData
+public struct MainCamera : IComponentData
 {
-    public Transform Transform;
+    public UnityObjectRef<Transform> Transform;
 }
 
 struct CameraSmoothTrackSettings : IComponentData
@@ -114,9 +114,10 @@ partial class SmoothlyTrackCameraTarget : SystemBase
         var timeAhead = (float)(SystemAPI.Time.ElapsedTime - mostRecentTime[0].ElapsedTime);
 
         foreach (var(mainCamera, cameraSmoothTrack, localToWorld)
-                 in SystemAPI.Query<MainCamera, RefRW<CameraSmoothTrackSettings>, RefRO<LocalToWorld>>().WithAll<Initialized>())
+                 in SystemAPI.Query<RefRO<MainCamera>, RefRW<CameraSmoothTrackSettings>, RefRO<LocalToWorld>>().WithAll<Initialized>())
         {
-            var worldPosition = (float3)mainCamera.Transform.position;
+            var cameraTransform = mainCamera.ValueRO.Transform.Value;
+            var worldPosition = (float3)cameraTransform.position;
 
             float3 newPositionFrom = SystemAPI.HasComponent<LocalToWorld>(cameraSmoothTrack.ValueRW.LookFrom)
                 ? SystemAPI.GetComponent<LocalToWorld>(cameraSmoothTrack.ValueRW.LookFrom).Position
@@ -155,7 +156,7 @@ partial class SmoothlyTrackCameraTarget : SystemBase
             newForward = math.normalizesafe(newForward);
             quaternion newRotation = quaternion.LookRotation(newForward, math.up());
 
-            mainCamera.Transform.SetPositionAndRotation(newPositionFrom, newRotation);
+            cameraTransform.SetPositionAndRotation(newPositionFrom, newRotation);
             cameraSmoothTrack.ValueRW.OldPositionTo = newPositionTo;
         }
     }

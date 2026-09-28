@@ -1,6 +1,5 @@
 // This script is used in the 5g1. Change Collision Filter - Boxes demo.
 // Baker for the ColliderGridSpawner where the component is used in the ColliderGridCreationSystem.
-using System;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -39,7 +38,7 @@ namespace Unity.Physics
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, createComponent);
 
-                AddSharedComponentManaged(entity, new ColliderMaterialsComponent
+                AddSharedComponent(entity, new ColliderMaterialsComponent
                 {
                     GrowMaterial = materialGrow,
                     ShrinkMaterial = materialShrink
@@ -56,21 +55,9 @@ namespace Unity.Physics
         public float3 SpawningPosition;
     }
 
-    public struct ColliderMaterialsComponent : ISharedComponentData, IEquatable<ColliderMaterialsComponent>
+    public struct ColliderMaterialsComponent : ISharedComponentData
     {
-        public UnityEngine.Material GrowMaterial;
-        public UnityEngine.Material ShrinkMaterial;
-
-        public bool Equals(ColliderMaterialsComponent other) =>
-            Equals(GrowMaterial, other.GrowMaterial)
-            && Equals(ShrinkMaterial, other.ShrinkMaterial);
-
-        public override bool Equals(object obj) => obj is ColliderMaterialsComponent other && Equals(other);
-
-        public override int GetHashCode() =>
-            unchecked((int)math.hash(new int2(
-                GrowMaterial != null ? GrowMaterial.GetHashCode() : 0,
-                ShrinkMaterial != null ? ShrinkMaterial.GetHashCode() : 0
-            )));
+        public UnityObjectRef<UnityEngine.Material> GrowMaterial;
+        public UnityObjectRef<UnityEngine.Material> ShrinkMaterial;
     }
 }
